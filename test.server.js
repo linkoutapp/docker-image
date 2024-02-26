@@ -19,7 +19,7 @@ let browser;
 let page;
 let cdp;
 
-app.post("/", async (req, res) => {
+app.post("/login_with_email", async (req, res) => {
   try {
     browser = await puppeteer.launch({
       headless: true,
@@ -153,6 +153,22 @@ app.post("/reactions", async (req, res) => {
   }
 });
 
+app.post("/sales_nav_scraper", async (req, res) => {
+  const { url, count = 100 } = req.body;
+
+  try {
+    const salesNavScraper = await Linkout.services.salesNavScraper(page, cdp, {
+      url: url,
+      count: count,
+    });
+
+    res.status(200).json({ salesNavScraper });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 app.post("/comments", async (req, res) => {
   const { user, count = 5 } = req.body;
 
@@ -201,11 +217,11 @@ app.post("/send2FA", async (req, res) => {
 });
 
 app.post("/connection_status", async (req, res) => {
-  const { url } = req.body;
+  const { user } = req.body;
 
   try {
     const status = await Linkout.services.connectionStatus(page, cdp, {
-      url: url,
+      user: user,
     });
 
     res.status(200).json({ status });
