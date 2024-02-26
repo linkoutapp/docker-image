@@ -28,6 +28,7 @@ RUN npm install
 # Copy Puppeteer code into the container
 COPY test.example.js ./
 COPY test.server.js ./
+COPY .env ./
 
 # Expose environment variables
 ENV DBUS_SESSION_BUS_ADDRESS autolaunch:
