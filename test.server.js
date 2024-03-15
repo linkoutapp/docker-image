@@ -105,6 +105,37 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.post("/connect", async (req, res) => {
+  const { url, message } = req.body;
+
+  try {
+    await Linkout.services.connect(page, cdp, {
+      url: url,
+      message: message,
+    });
+
+    res.status(200).json({ result: "Connection request sent successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.post("/endorse", async (req, res) => {
+  const { url } = req.body;
+
+  try {
+    await Linkout.services.endorse(page, cdp, {
+      url: url,
+    });
+
+    res.status(200).json({ result: "Endorsed successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 app.post("/message", async (req, res) => {
   const { url, message } = req.body;
 
@@ -154,11 +185,12 @@ app.post("/reactions", async (req, res) => {
 });
 
 app.post("/sales_nav_scraper", async (req, res) => {
-  const { url, count = 100 } = req.body;
+  const { leadType, filterParams, count = 100 } = req.body;
 
   try {
     const salesNavScraper = await Linkout.services.salesNavScraper(page, cdp, {
-      url: url,
+      leadType,
+      filterParams: filterParams,
       count: count,
     });
 
