@@ -1,18 +1,25 @@
 {
-  "name": "linkout-npm",
-  "version": "1.0.0",
-  "description": "",
+  "name": "linkout-docker-image",
+  "version": "2.0.0",
+  "description": "Docker package wrapper for the Linkout read-only MCP server.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "linkout-mcp",
+    "test": "node --test"
   },
-  "author": "",
-  "license": "ISC",
+  "engines": {
+    "node": ">=22"
+  },
+  "author": "Sai-Adarsh <saiadarshsivakumar@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/linkoutapp/docker-image.git"
+  },
   "dependencies": {
-    "dotenv": "^16.4.4",
-    "linkout-scraper": "1.1.6",
-    "puppeteer": "^21.5.2",
-    "puppeteer-extra": "^3.3.6",
-    "puppeteer-extra-plugin-stealth": "^2.11.2"
+    "linkout-scraper": "github:linkoutapp/linkout-scraper#main"
+  },
+  "overrides": {
+    "@hono/node-server": "2.0.11"
   }
 }
