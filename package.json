@@ -17,7 +17,7 @@
     "url": "git+https://github.com/linkoutapp/docker-image.git"
   },
   "dependencies": {
-    "linkout-scraper": "github:linkoutapp/linkout-scraper#main"
+    "linkout-scraper": "2.0.0"
   },
   "overrides": {
     "@hono/node-server": "2.0.11"
