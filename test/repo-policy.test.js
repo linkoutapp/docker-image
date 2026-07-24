@@ -55,7 +55,8 @@ test("legacy cloud automation and removed services are absent", () => {
 test("readme documents the latest read-only MCP surface", () => {
   const readme = read("README.md");
 
-  assert.match(readme, /linkout-scraper@2\.0\.0/);
+  assert.match(readme, /github:linkoutapp\/linkout-scraper#main/);
+  assert.match(readme, /until the npm registry release is available/);
   assert.match(readme, /read-only MCP/i);
   assert.match(readme, /LINKOUT_CHROME_URL/);
   assert.match(readme, /does not run headless Chrome/i);

@@ -1,6 +1,8 @@
 # Linkout Docker Image
 
-Docker packaging for `linkout-scraper@2.0.0`.
+Docker packaging for the current Linkout scraper runtime.
+
+The image installs `linkout-scraper` from `github:linkoutapp/linkout-scraper#main` until the npm registry release is available.
 
 This image runs the Linkout read-only MCP server. It does not run headless Chrome. It does not copy .env, submit LinkedIn credentials, set cookies, spoof a browser fingerprint, use proxies, or expose removed Sales Nav and login services.
 
