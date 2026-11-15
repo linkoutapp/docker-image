@@ -47,3 +47,8 @@ npm test
 Linkout’s $29 offer includes one 30-minute session with Sai to set up `linkout-scraper` on your Mac. The code is free under the MIT license. The deal is in AppSumo review and is not available to buy yet.
 
 [AppSumo deal status](https://www.linkout.space/appsumo.html)
+
+
+## Dependency security
+
+The lockfile and targeted MCP SDK / Hono overrides patch the dependency tree of the published `linkout-scraper@2.0.0` package. Builds use `npm ci` with lifecycle scripts disabled. This does not add unreleased scraper source changes; adopt a newer scraper release separately once it is published.

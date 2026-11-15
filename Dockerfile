@@ -6,7 +6,7 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install --omit=dev \
+RUN npm ci --omit=dev --ignore-scripts \
   && npm cache clean --force
 
 USER node
