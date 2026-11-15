@@ -1,6 +1,14 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
+test('the published runtime rejects Linux before trying to connect to Chrome', async () => {
+  const {connectLocalChrome} = require('linkout-scraper/lib/browser/connect-local-chrome');
+  await assert.rejects(connectLocalChrome({
+    platform: 'linux',
+    puppeteer: {connect() {throw new Error('Must not connect');}},
+  }), error => error.code === 'UNSUPPORTED_DEVICE');
+});
+
 test('published scraper registers its read-only tools with the patched SDK', async () => {
   const {McpServer} = await import('@modelcontextprotocol/sdk/server/mcp.js');
   const {Client} = await import('@modelcontextprotocol/sdk/client/index.js');

@@ -1,8 +1,14 @@
-# Linkout Docker Image
+# Linkout Docker package
 
-Docker packaging for `linkout-scraper@2.0.0`.
+Container packaging for `linkout-scraper@2.0.0` and its read-only MCP server.
 
-This image runs the Linkout read-only MCP server. It does not run headless Chrome. It does not copy .env, submit LinkedIn credentials, set cookies, spoof a browser fingerprint, use proxies, or expose removed login services.
+## Current runtime limitation
+
+The published scraper runtime requires macOS and a loopback Chrome endpoint. A Linux container therefore stops with `UNSUPPORTED_DEVICE` before connecting to Chrome. Setting `LINKOUT_CHROME_URL`, enabling host networking, or using a host gateway does not remove that platform check.
+
+Use the [native macOS setup](https://github.com/linkoutapp/linkout-scraper#usage) to run Linkout today. This repository can build and test the package image, but it does not provide a working Linux browser runtime.
+
+The image does not run headless Chrome. It does not copy .env or browser state into the image, and it does not implement login or session export.
 
 ## Build
 
@@ -10,45 +16,20 @@ This image runs the Linkout read-only MCP server. It does not run headless Chrom
 docker build -t linkout-mcp .
 ```
 
-## Run
+The image installs the committed dependency lock with `npm ci --omit=dev --ignore-scripts` and runs as the unprivileged `node` user. Docker must be installed locally to build it.
 
-Linkout reads LinkedIn through an already signed-in visible Chrome session. Start Chrome on the host device and expose DevTools deliberately.
+## Test the package
 
-```sh
-"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
-  --remote-debugging-port=9222 \
-  --window-size=1440,900 \
-  --user-data-dir="/absolute/path/to/linkout-chrome-profile" \
-  https://www.linkedin.com/feed/
-```
-
-Run the MCP image with the Chrome endpoint configured:
+Use Node.js 22 or newer:
 
 ```sh
-docker run --rm -i \
-  -e LINKOUT_CHROME_URL=http://127.0.0.1:9222 \
-  linkout-mcp
-```
-
-Notes:
-
-- `LINKOUT_CHROME_URL` must point to the approved visible Chrome session.
-- On Docker Desktop, container access to host Chrome may require host networking or a host-gateway setup. Do not replace this with headless Chrome inside the container.
-- Authentication stays in Chrome. The image does not contain credentials.
-
-## Test
-
-```sh
+npm ci --ignore-scripts
 npm test
+npm audit
 ```
 
-## AppSumo setup session
-
-Linkout’s $29 offer includes one 30-minute session with Sai to set up `linkout-scraper` on your Mac. The code is free under the MIT license. The deal is in AppSumo review and is not available to buy yet.
-
-[AppSumo deal status](https://www.linkout.space/appsumo.html)
-
+The tests use an in-memory MCP client/server pair to check the eight read-only tools. They do not start Chrome or connect to LinkedIn. The platform-boundary test confirms the published package rejects Linux.
 
 ## Dependency security
 
-The lockfile and targeted MCP SDK / Hono overrides patch the dependency tree of the published `linkout-scraper@2.0.0` package. Builds use `npm ci` with lifecycle scripts disabled. This does not add unreleased scraper source changes; adopt a newer scraper release separately once it is published.
+Targeted MCP SDK and Hono overrides patch the dependency tree of the published package. This does not add unreleased scraper source changes. Adopt a newer scraper release separately once it is published.
